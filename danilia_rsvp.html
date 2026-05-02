@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Danilia's 18th Birthday — RSVP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#0f0608;min-height:100vh;}
+
+nav{display:flex;justify-content:center;gap:16px;padding:1rem;background:#0f0608;border-bottom:0.5px solid rgba(201,168,76,0.2);}
+.nav-btn{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-family:'Montserrat',sans-serif;padding:0.4rem 0.8rem;transition:color 0.2s;border-bottom:1px solid transparent;}
+.nav-btn.active{color:#c9a84c;border-bottom-color:#c9a84c;}
+.nav-btn:hover{color:#e8a0b8;}
+
+.page{display:none;}
+.page.active{display:block;}
+
+/* RSVP */
+.rsvp-wrap{min-height:calc(100vh - 60px);background:linear-gradient(145deg,#fff0f5 0%,#fafafa 40%,#f5f5f8 100%);display:flex;align-items:center;justify-content:center;padding:2rem 1rem;}
+.card{background:#fff;border:1px solid #e8c8d8;border-radius:2px;max-width:500px;width:100%;padding:3rem 2.5rem;position:relative;box-shadow:0 2px 40px rgba(200,150,180,0.13);}
+.card::before,.card::after{content:'';position:absolute;border:1px solid #d4a8c0;border-radius:2px;pointer-events:none;}
+.card::before{inset:8px;}.card::after{inset:14px;border-color:#e8d0dc;}
+.top-ornament{text-align:center;color:#c0879c;font-size:11px;letter-spacing:0.25em;font-weight:300;margin-bottom:0.5rem;}
+.divider{display:flex;align-items:center;gap:10px;margin:0.6rem 0;}
+.divider-line{flex:1;height:0.5px;background:linear-gradient(90deg,transparent,#d4a8c0,transparent);}
+.divider-diamond{width:6px;height:6px;background:#c0879c;transform:rotate(45deg);flex-shrink:0;}
+.card-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:12px;letter-spacing:0.3em;color:#9a6878;text-align:center;text-transform:uppercase;margin-bottom:0.2rem;}
+.card-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:42px;color:#2a2a2a;text-align:center;line-height:1.1;margin:0.2rem 0 0.3rem;}
+.floral{text-align:center;color:#d4a8c0;font-size:18px;letter-spacing:6px;margin:0.2rem 0 0.5rem;}
+.event-details{background:linear-gradient(135deg,#fdf0f5,#f8f4fb);border:0.5px solid #e2c2d2;border-radius:1px;padding:1rem 1.5rem;margin:1.2rem 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;text-align:center;}
+.detail-item label{display:block;font-size:8px;letter-spacing:0.25em;color:#b08090;text-transform:uppercase;margin-bottom:4px;}
+.detail-item span{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#3a2a30;}
+.dress-note{text-align:center;font-size:10px;letter-spacing:0.3em;color:#b08090;text-transform:uppercase;margin-bottom:1.5rem;}
+.form-group{margin-bottom:1.2rem;}
+.form-group label{display:block;font-size:9px;letter-spacing:0.25em;color:#9a6878;text-transform:uppercase;margin-bottom:0.4rem;}
+.form-group input{width:100%;border:none;border-bottom:1px solid #d4b0c0;background:transparent;padding:0.5rem 0;font-family:'Cormorant Garamond',serif;font-size:17px;color:#2a2a2a;outline:none;transition:border-color 0.2s;border-radius:0;}
+.form-group input::placeholder{color:#c8a8b8;font-style:italic;}
+.form-group input:focus{border-bottom-color:#c0879c;}
+.deadline{text-align:center;font-size:9px;letter-spacing:0.2em;color:#b08090;text-transform:uppercase;margin:1rem 0 1.4rem;}
+.deadline span{color:#c0879c;font-weight:500;}
+.submit-btn{width:100%;background:#c0879c;color:#fff;border:none;padding:0.9rem;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;cursor:pointer;border-radius:1px;transition:background 0.2s;}
+.submit-btn:hover{background:#b07088;}
+.success-screen{display:none;text-align:center;padding:1rem 0;}
+.success-icon{width:50px;height:50px;border:1px solid #c0879c;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.success-icon-inner{width:8px;height:8px;background:#c0879c;transform:rotate(45deg);}
+.success-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;color:#2a2a2a;margin-bottom:0.4rem;}
+.success-msg{font-size:10px;letter-spacing:0.2em;color:#9a6878;text-transform:uppercase;line-height:2;}
+
+/* DASHBOARD */
+.dash-wrap{min-height:calc(100vh - 60px);background:#0f0608;padding:2rem 1.5rem;}
+.dash-header{text-align:center;margin-bottom:2rem;}
+.dash-title{font-family:'Playfair Display',serif;font-style:italic;font-size:32px;background:linear-gradient(135deg,#f5d98a,#c9a84c,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.dash-sub{font-size:9px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;margin-top:4px;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;max-width:600px;margin-left:auto;margin-right:auto;}
+.stat-card{background:rgba(201,168,76,0.08);border:0.5px solid rgba(201,168,76,0.3);padding:1rem;text-align:center;border-radius:1px;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:#f5d98a;line-height:1;}
+.stat-label{font-size:8px;letter-spacing:0.25em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-top:4px;}
+.dash-gold-line{height:0.5px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:1.2rem auto;max-width:600px;}
+.section-label{font-size:8px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;margin-bottom:0.8rem;max-width:600px;margin-left:auto;margin-right:auto;}
+.guest-table{max-width:600px;margin:0 auto;}
+.table-head{display:grid;grid-template-columns:2fr 2fr 1fr;gap:8px;padding:0.5rem 0.8rem;background:rgba(201,168,76,0.12);margin-bottom:4px;}
+.table-head span{font-size:8px;letter-spacing:0.25em;color:#c9a84c;text-transform:uppercase;}
+.guest-row{display:grid;grid-template-columns:2fr 2fr 1fr;gap:8px;padding:0.6rem 0.8rem;border-bottom:0.5px solid rgba(255,255,255,0.06);align-items:center;}
+.guest-row:hover{background:rgba(255,255,255,0.03);}
+.g-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#fff;}
+.g-phone{font-size:11px;color:rgba(255,255,255,0.5);}
+.g-num{font-size:10px;color:rgba(201,168,76,0.6);text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:6px;}
+.delete-btn{background:none;border:none;color:rgba(200,100,120,0.5);cursor:pointer;font-size:16px;padding:2px 6px;transition:color 0.2s;line-height:1;}
+.delete-btn:hover{color:#e0607a;}
+.empty-state{text-align:center;padding:3rem 1rem;color:rgba(255,255,255,0.2);font-size:12px;letter-spacing:0.15em;}
+.clear-btn{display:block;width:100%;max-width:600px;margin:1.5rem auto 0;padding:0.7rem;background:transparent;border:0.5px solid rgba(200,80,100,0.3);color:rgba(200,80,100,0.5);font-size:9px;letter-spacing:0.25em;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;border-radius:1px;}
+.clear-btn:hover{background:rgba(200,80,100,0.1);color:#e0607a;border-color:#e0607a;}
+
+/* PIN LOCK */
+.pin-wrap{min-height:calc(100vh - 60px);background:#0f0608;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.pin-card{background:rgba(201,168,76,0.05);border:0.5px solid rgba(201,168,76,0.3);padding:2.5rem;text-align:center;max-width:320px;width:100%;border-radius:1px;}
+.pin-title{font-family:'Playfair Display',serif;font-style:italic;font-size:22px;background:linear-gradient(135deg,#f5d98a,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.4rem;}
+.pin-sub{font-size:9px;letter-spacing:0.25em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:1.5rem;}
+.pin-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(201,168,76,0.4);padding:0.6rem 0;font-family:'Cormorant Garamond',serif;font-size:24px;color:#f5d98a;text-align:center;letter-spacing:0.5em;outline:none;border-radius:0;}
+.pin-input::placeholder{color:rgba(201,168,76,0.2);letter-spacing:0.3em;font-size:16px;}
+.pin-btn{margin-top:1.2rem;width:100%;background:#c9a84c;color:#0f0608;border:none;padding:0.8rem;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;cursor:pointer;border-radius:1px;transition:background 0.2s;font-weight:500;}
+.pin-btn:hover{background:#e8c96a;}
+.pin-error{font-size:10px;color:#e8607a;letter-spacing:0.15em;margin-top:0.8rem;display:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-btn active" onclick="showPage('rsvp',this)">RSVP</button>
+  <button class="nav-btn" onclick="showPage('host',this)">Host Dashboard</button>
+</nav>
+
+<!-- RSVP PAGE -->
+<div id="rsvp" class="page active">
+  <div class="rsvp-wrap">
+    <div class="card">
+      <div class="top-ornament">you are invited to celebrate</div>
+      <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+      <div class="card-title">the 18th birthday of</div>
+      <div class="card-name">Danilia</div>
+      <div class="floral">❀ ✿ ❀</div>
+      <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+      <div class="event-details">
+        <div class="detail-item"><label>Date</label><span>22nd May 2026</span></div>
+        <div class="detail-item"><label>Time</label><span>5:00 PM</span></div>
+        <div class="detail-item"><label>Venue</label><span>South Avenue Grill</span></div>
+      </div>
+      <div class="dress-note">✦ &nbsp; dress code: all white · elegant &nbsp; ✦</div>
+      <div id="form-section">
+        <div class="form-group">
+          <label>Your full name</label>
+          <input type="text" id="guest-name" placeholder="Enter your name"/>
+        </div>
+        <div class="form-group">
+          <label>Parent's phone number</label>
+          <input type="tel" id="parent-phone" placeholder="+1 876 000 0000"/>
+        </div>
+        <div class="deadline">rsvp by <span>15th May 2026</span></div>
+        <button class="submit-btn" onclick="submitRSVP()">confirm attendance</button>
+      </div>
+      <div id="success-section" class="success-screen">
+        <div class="success-icon"><div class="success-icon-inner"></div></div>
+        <div class="success-name" id="confirmed-name"></div>
+        <div class="success-msg">your attendance has been confirmed<br>we look forward to celebrating with you<br><br>see you on the 22nd ✦</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOST PAGE (PIN LOCKED) -->
+<div id="host" class="page">
+  <div id="pin-screen" class="pin-wrap">
+    <div class="pin-card">
+      <div class="pin-title">Host Access</div>
+      <div class="pin-sub">enter your pin to continue</div>
+      <input type="password" class="pin-input" id="pin-input" placeholder="· · · ·" maxlength="4" onkeydown="if(event.key==='Enter') checkPin()"/>
+      <button class="pin-btn" onclick="checkPin()">enter</button>
+      <div class="pin-error" id="pin-error">incorrect pin — try again</div>
+    </div>
+  </div>
+  <div id="dash-screen" style="display:none;">
+    <div class="dash-wrap">
+      <div class="dash-header">
+        <div class="dash-title">Danilia's Dashboard</div>
+        <div class="dash-sub">✦ &nbsp; birthday guest tracker &nbsp; ✦</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="total-count">0</div><div class="stat-label">confirmed guests</div></div>
+        <div class="stat-card"><div class="stat-num" id="days-left">—</div><div class="stat-label">days until deadline</div></div>
+      </div>
+      <div class="dash-gold-line"></div>
+      <div class="section-label">✦ &nbsp; confirmed guest list</div>
+      <div class="guest-table">
+        <div class="table-head"><span>Name</span><span>Parent's number</span><span style="text-align:right">#</span></div>
+        <div id="guest-list-body"></div>
+      </div>
+      <button class="clear-btn" onclick="clearAll()">clear all responses</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'danilia_18th_guests';
+  const PIN = '1805'; // May 18 = her bday
+
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (id === 'host') {
+      const unlocked = sessionStorage.getItem('host_unlocked');
+      if (unlocked) { showDash(); } else { document.getElementById('pin-screen').style.display='flex'; document.getElementById('dash-screen').style.display='none'; }
+    }
+  }
+
+  function checkPin() {
+    const val = document.getElementById('pin-input').value;
+    if (val === PIN) {
+      sessionStorage.setItem('host_unlocked', '1');
+      showDash();
+    } else {
+      document.getElementById('pin-error').style.display = 'block';
+      document.getElementById('pin-input').value = '';
+    }
+  }
+
+  function showDash() {
+    document.getElementById('pin-screen').style.display = 'none';
+    document.getElementById('dash-screen').style.display = 'block';
+    renderDashboard();
+  }
+
+  function loadGuests() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  }
+
+  function saveGuests(g) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(g));
+  }
+
+  function submitRSVP() {
+    const name = document.getElementById('guest-name').value.trim();
+    const phone = document.getElementById('parent-phone').value.trim();
+    if (!name || !phone) { alert('Please fill in both fields.'); return; }
+    const guests = loadGuests();
+    guests.push({ name, phone, time: new Date().toISOString() });
+    saveGuests(guests);
+    document.getElementById('confirmed-name').textContent = name;
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-section').style.display = 'block';
+  }
+
+  function renderDashboard() {
+    const guests = loadGuests();
+    document.getElementById('total-count').textContent = guests.length;
+    const diff = Math.ceil((new Date('2026-05-15') - new Date()) / 86400000);
+    document.getElementById('days-left').textContent = diff > 0 ? diff : '0';
+    const body = document.getElementById('guest-list-body');
+    if (guests.length === 0) { body.innerHTML = '<div class="empty-state">no responses yet · share this page with your guests</div>'; return; }
+    body.innerHTML = guests.map((g,i) => `
+      <div class="guest-row">
+        <span class="g-name">${g.name}</span>
+        <span class="g-phone">${g.phone}</span>
+        <span class="g-num">${i+1} <button class="delete-btn" onclick="deleteGuest(${i})">×</button></span>
+      </div>`).join('');
+  }
+
+  function deleteGuest(i) {
+    const g = loadGuests(); g.splice(i,1); saveGuests(g); renderDashboard();
+  }
+
+  function clearAll() {
+    if (!confirm('Clear all RSVP responses?')) return;
+    saveGuests([]); renderDashboard();
+  }
+</script>
+</body>
+</html>
